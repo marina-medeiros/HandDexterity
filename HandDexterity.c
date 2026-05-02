@@ -1,102 +1,130 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-
-// I2C defines
-// This example will use I2C0 on GPIO8 (SDA) and GPIO9 (SCL) running at 400KHz.
-// Pins can be changed, see the GPIO function select table in the datasheet for information on GPIO assignments
-#define I2C_PORT i2c0
-#define I2C_SDA 8
-#define I2C_SCL 9
-
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+#include "include/ssd1306.h"
+#include "include/menu.h"
 #include "hardware/adc.h"
-#include "joystick.h"
-#include "pico/stdlib.h"
-#include <stdio.h>
 
-const uint led_pin_red = 12;
+#define I2C_PORT i2c1
+#define I2C_SDA 15
+#define I2C_SCL 14
+#define LED_B 12
+#define LED_R 13
+#define LED_G 11
+#define SW 22  //Pino do Botão do Joystick
+#define VRY 26 //Porta ADC de variação do Y do Joystick
+#define VRX 27 //Porta ADC de variação do X do joystick
+
+//ssd1306_t disp;//variável display do Oled
 
 void setup(){
-    gpio_init(led_pin_red);
-    gpio_set_dir(led_pin_red, GPIO_OUT);
-    setup_joystick();
-}
-
-//LED
-void vBlinkTask(){
-    for (;;){
-        gpio_put(led_pin_red, 1); // LED pin 12 
-        vTaskDelay(50);
-        gpio_put(led_pin_red, 0);
-        vTaskDelay(950);
-        //printf("Blinking\n");
-    }
-}
-
-// SENSOR
-void vTemperatureTask(){
-    while (true){
-        adc_set_temp_sensor_enabled(true);
-        adc_select_input(4);
-        // converte o valor para abranger 12 bits no máximo
-        const float conversionFactor = 3.3f / (1 << 12);
-        float adc = (float)adc_read() * conversionFactor;
-        float tempC = 27.0f - (adc - 0.706f) / 0.001721f; // Calculo para a temperatura aproximada mostrado no datasheet do RP2040
-        printf("Temperatura: %0.2f\n", tempC);
-        vTaskDelay(2500);
-    }
-}
-
-// JOYSTICK
-void vJoystickTask(){
-    int last_direction = 5;
-    uint16_t vry_value, vrx_value;
-
-    while (1){
-        joystick_read_axis(&vry_value, &vrx_value);
-
-        int direction = get_direction(vry_value, vrx_value);
-
-        if(direction != last_direction){
-            switch (direction) {
-            case 4:
-                printf("Direita\n");
-                vTaskDelay(50);
-                break;
-            case 3:
-                printf("Esquerda\n");
-                vTaskDelay(50);
-                break;
-            case 2:
-                printf("Cima\n");
-                vTaskDelay(50);
-                break;
-            case 1:
-                printf("Baixo\n");
-                vTaskDelay(50);
-                break;
-            case 5:
-                vTaskDelay(50);
-                break;
-            }
-        }
-
-        last_direction = direction;
-    }
-    
-}
-
-int main(){
+    //inicialização do Oled
     stdio_init_all();
+    i2c_init(I2C_PORT, 400*1000);
+    gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
+    gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
+    gpio_pull_up(I2C_SDA);
+    gpio_pull_up(I2C_SCL);
+    setup_display();
+
+    //inicializa leds
+    gpio_init(LED_B);
+    gpio_init(LED_R);
+    gpio_init(LED_G);
+    gpio_set_dir(LED_B, GPIO_OUT);
+    gpio_set_dir(LED_R, GPIO_OUT);
+    gpio_set_dir(LED_G, GPIO_OUT);
+
+    //inicialização do botão do joystick
+    gpio_init(SW);
+    gpio_set_dir(SW, GPIO_IN);
+    gpio_pull_up(SW);
+
+    //Inicializar ADC do joystick
     adc_init();
+    adc_gpio_init(VRY);
+    adc_gpio_init(VRX);
+
+
+}
+// void print_texto(int x, int y, int tam, char * msg){
+//     ssd1306_draw_string(&disp, x, y, tam, msg);
+//     ssd1306_show(&disp);
+// }
+// void print_retangulo(int x1, int y1, int x2, int y2){
+//     ssd1306_draw_empty_square(&disp, x1, y1, x2, y2);
+//     ssd1306_show(&disp);
+// }
+void set_leds(int R, int G, int B){
+    gpio_put(LED_R, R);   
+    gpio_put(LED_G, G);   
+    gpio_put(LED_B, B);
+}
+// void print_menu(int pos){
+//         ssd1306_clear(&disp);//Limpa a tela
+//         print_texto(52, 2, 1, "Menu");
+//         print_retangulo(2,pos+2,120,12);
+//         print_texto(6, 18, 1.5,"Programa 01");
+//         print_texto(6, 30, 1.5, "Programa 02");
+//         print_texto(6, 42, 1.5, "Programa 03");
+// }
+
+int main()
+{
     setup();
+    uint countdown = 0; //verificar seleções para baixo do joystick
+    uint countup = 2; //verificar seleções para cima do joystick
+    uint pos_y=12; //inicialização de variável para ler posição do Y do Joystick
+    uint posy_ant=12;//posição anterior
+    uint menu=1;
     
-    xTaskCreate(vBlinkTask, "Blink Task", 128, NULL, 1, NULL);
-    xTaskCreate(vTemperatureTask, "Temperature Task", 256, NULL, 1, NULL);
-    xTaskCreate(vJoystickTask, "Joystick Task", 256, NULL, 1, NULL);
-    vTaskStartScheduler();
+    print_menu(pos_y);//impressão inicial do menu
+
+    while (true) {
+        //trecho de código aproveitado de https://github.com/BitDogLab/BitDogLab-C/blob/main/joystick/joystick.c
+        adc_select_input(0);
+        uint adc_y_raw = adc_read();//leitura do joystick
+        const uint bar_width = 40;
+        const uint adc_max = (1 << 12) - 1;
+        uint bar_y_pos = adc_y_raw * bar_width / adc_max; //bar_y_pos determinará se o Joystick foi pressionado para cima ou para baixo
+
+        //o valor de 20 é o estado de repouso do Joystick
+        if(bar_y_pos < 20 && countdown <2){
+            pos_y+=12;
+            countdown+=1;
+            countup-=1;
+            menu++;//incrementa menu
+        }else
+            if(bar_y_pos > 20 && countup <2){
+                pos_y-=12;
+                countup+=1;
+                countdown-=1;
+                menu--;//decrementa menu
+        }
+        //texto do Menu
+        if(pos_y!=posy_ant){//verifica se houve mudança de posição no menu.
+            print_menu(pos_y);
+        }
+         //verifica se botão foi pressionado. 
+         //Se sim, entra no switch case para verificar posição do seletor e chama acionamento dos leds.
+        if(gpio_get(SW) == 0){
+            switch (menu){
+            case 1:
+                set_leds(1,0,0);//Vermelho
+            break;
+            case 2:
+                set_leds(0,1,0);//Verde
+            break;
+            case 3:
+                set_leds(0,0,1);//Azul
+            break;
+            default:
+                set_leds(0,0,0);
+            break;
+            }
+       }
+        sleep_ms(100);//delay de atualização
+        posy_ant=pos_y;//atualização posição anterior.
+
+    }
 }
