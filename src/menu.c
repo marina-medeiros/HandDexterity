@@ -23,9 +23,9 @@ void print_retangulo(int x1, int y1, int x2, int y2){
 }
 void print_menu(int pos){
         ssd1306_clear(&disp);//Limpa a tela
-        print_texto(52, 2, 1, "Menu");
+        print_texto(52, 2, 1.5, "Menu");
         print_retangulo(2,pos+2,120,12);
-        print_texto(6, 18, 1.5,"Programa 01");
-        print_texto(6, 30, 1.5, "Programa 02");
-        print_texto(6, 42, 1.5, "Programa 03");
+        print_texto(6, 18, 1.9, "Hand Dexterity Test");
+        print_texto(6, 30, 1.9, "Learn");
+        print_texto(6, 42, 1.9, "Settings");
 }
