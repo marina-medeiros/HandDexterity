@@ -39,7 +39,7 @@ pico_sdk_init()
 
 add_executable(HandDexterity HandDexterity.c 
                 src/leds.c
-                src/menu.c
+                src/display.c
                 src/joystick.c
                 src/ssd1306.c)
 

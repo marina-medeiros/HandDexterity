@@ -3,12 +3,13 @@
 #include "hardware/i2c.h"
 #include "hardware/adc.h"
 #include "include/ssd1306.h"
-#include "include/menu.h"
+#include "include/display.h"
 #include "include/leds.h"
 
 #define SW 22  //Pino do Botão do Joystick
 #define VRY 26 //Porta ADC de variação do Y do Joystick
 #define VRX 27 //Porta ADC de variação do X do joystick
+
 
 void setup_joystick(){
     //inicialização do botão do joystick
@@ -21,6 +22,17 @@ void setup_joystick(){
     adc_gpio_init(VRY);
     adc_gpio_init(VRX);
 }
+
+void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value) {
+    adc_select_input(0);
+    sleep_us(2);
+    *vrx_value = adc_read();
+
+    adc_select_input(1);
+    sleep_us(2);
+    *vry_value = adc_read();
+}
+
 
 void menu_control(){ 
     uint countdown = 0; //verificar seleções para baixo do joystick
