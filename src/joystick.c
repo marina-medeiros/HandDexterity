@@ -69,7 +69,6 @@ void menu_control(){
             switch (menu){
             case 1:
                 set_leds(1,0,0);
-                test_joy();
             break;
             case 2:
                 set_leds(0,0,0);
