@@ -12,9 +12,8 @@ extern ssd1306_t disp;
 
 void setup_display();
 void print_texto(int x, int y, int tam, char * msg);
+void print_tiny_square(uint16_t x, uint16_t y);
 void print_retangulo(int x1, int y1, int x2, int y2);
 void print_menu(int pos);
-void clear_screen();
-void draw_dot(int x, int y);
 
 #endif

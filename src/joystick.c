@@ -5,11 +5,11 @@
 #include "include/ssd1306.h"
 #include "include/display.h"
 #include "include/leds.h"
+#include "include/learn.h"
 
 #define SW 22  //Pino do Botão do Joystick
 #define VRY 26 //Porta ADC de variação do Y do Joystick
 #define VRX 27 //Porta ADC de variação do X do joystick
-
 
 void setup_joystick(){
     //inicialização do botão do joystick
@@ -24,11 +24,11 @@ void setup_joystick(){
 }
 
 void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value) {
-    adc_select_input(0);
+    adc_select_input(1);
     sleep_us(2);
     *vrx_value = adc_read();
 
-    adc_select_input(1);
+    adc_select_input(0);
     sleep_us(2);
     *vry_value = adc_read();
 }
@@ -69,9 +69,11 @@ void menu_control(){
             switch (menu){
             case 1:
                 set_leds(1,0,0);
+                test_joy();
             break;
             case 2:
-                set_leds(0,1,0);
+                set_leds(0,0,0);
+                learn();
             break;
             case 3:
                 set_leds(0,0,1);

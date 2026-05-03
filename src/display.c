@@ -1,4 +1,5 @@
 #include "include/display.h"
+#include "pico/stdlib.h"
 
 ssd1306_t disp;
 
@@ -17,10 +18,17 @@ void print_texto(int x, int y, int tam, char * msg){
     ssd1306_draw_string(&disp, x, y, tam, msg);
     ssd1306_show(&disp);
 }
+
+void print_tiny_square(uint16_t x, uint16_t y){
+    ssd1306_draw_square_inverted(&disp, x, y, 2, 2);
+    ssd1306_show(&disp);
+}
+
 void print_retangulo(int x1, int y1, int x2, int y2){
     ssd1306_draw_empty_square(&disp, x1, y1, x2, y2);
     ssd1306_show(&disp);
 }
+
 void print_menu(int pos){
         ssd1306_clear(&disp);//Limpa a tela
         print_texto(52, 2, 1.5, "Menu");

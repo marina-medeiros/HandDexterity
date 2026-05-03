@@ -193,6 +193,7 @@ void ssd1306_clear_square(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t width, 
 	@param[in] height : height of square
 */
 void ssd1306_draw_square(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t width, uint32_t height);
+void ssd1306_draw_square_inverted(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 
 /**
 	@brief draw empty square at given position with given size

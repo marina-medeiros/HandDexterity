@@ -41,6 +41,7 @@ add_executable(HandDexterity HandDexterity.c
                 src/leds.c
                 src/display.c
                 src/joystick.c
+                src/learn.c
                 src/ssd1306.c)
 
 pico_set_program_name(HandDexterity "HandDexterity")
