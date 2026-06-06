@@ -58,9 +58,7 @@ void print_settings(int pos_y){
         ssd1306_clear(&disp);
         print_texto(5, 2, 1.5, "Joystick Sensibility");
 
-        int aux = pos_y / 12;
-        int pos = 18 * aux + 1;
-        print_square(6, pos, 14, 6);
+        print_square(6, (1.5*pos_y+1), 14, 6);
 
         printf("Age: %d years old\n", pos_y);
 
