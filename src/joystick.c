@@ -23,6 +23,7 @@ void setup_joystick(){
     adc_gpio_init(VRX);
 }
 
+// Usada no módulo de aprendizagem
 void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value) {
     adc_select_input(1);
     sleep_us(2);
@@ -46,10 +47,11 @@ void menu_control(){
     while (true) {
         adc_select_input(0);
         uint adc_y_raw = adc_read();
-        const uint bar_width = 40;
-        const uint adc_max = (1 << 12) - 1;
-        uint bar_y_pos = adc_y_raw * bar_width / adc_max; 
+        const uint bar_width = 40;                        // Escala de conversão
+        const uint adc_max = (1 << 12) - 1;               // 2^12 - 1 = 4095
+        uint bar_y_pos = adc_y_raw * bar_width / adc_max; // (0..4095) * 40 / 4095 -> valor normalizado em [0, 40]
 
+        // 20 é o valor neutro
         if(bar_y_pos < 20 && countdown <2){
             pos_y+=12;
             countdown+=1;
