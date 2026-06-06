@@ -5,7 +5,8 @@
 #include "include/ssd1306.h"
 #include "include/display.h"
 #include "include/leds.h"
-#include "include/learn.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 #define SW 22  //Pino do Botão do Joystick
 #define VRY 26 //Porta ADC de variação do Y do Joystick
@@ -35,7 +36,7 @@ void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value) {
 }
 
 
-void menu_control(){ 
+uint8_t menu_control(){ 
     uint countdown = 0; //verificar seleções para baixo do joystick
     uint countup = 2; //verificar seleções para cima do joystick
     uint pos_y=12; //inicialização de variável para ler posição do Y do Joystick
@@ -68,23 +69,14 @@ void menu_control(){
             print_menu(pos_y);
         }
         if(gpio_get(SW) == 0){
-            switch (menu){
-            case 1:
-                set_leds(1,0,0);
-            break;
-            case 2:
-                set_leds(0,0,0);
-                learn();
-            break;
-            case 3:
-                set_leds(0,0,1);
-            break;
-            default:
-                set_leds(0,0,0);
-            break;
+            if(menu > 3 || menu < 1){
+                return 0;
+            }
+            else{
+                return menu;
             }
        }
-        sleep_ms(100);
+        vTaskDelay(pdMS_TO_TICKS(100));
         posy_ant=pos_y;
 
     }

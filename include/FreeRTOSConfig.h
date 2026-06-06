@@ -50,6 +50,8 @@
 #define configMINIMAL_STACK_SIZE                ( configSTACK_DEPTH_TYPE ) 512 
 #define configUSE_16_BIT_TICKS                  0
 
+#define configUSE_TASK_NOTIFICATIONS            1 /////// Novo
+
 #define configIDLE_SHOULD_YIELD                 1
 
 /* Synchronization Related */
@@ -142,6 +144,7 @@ to exclude the API function. */
 #define INCLUDE_xTaskGetHandle                  1
 #define INCLUDE_xTaskResumeFromISR              1
 #define INCLUDE_xQueueGetMutexHolder            1
+#define INCLUDE_xTaskGetCurrentTaskHandle       1 ////////////// Novo
 
 #if PICO_RP2350
 #define configENABLE_MPU                        0

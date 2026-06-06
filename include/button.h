@@ -1,7 +1,9 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-void settup_button();
-int check_input(int R, int G, int B);
+#include "hardware/clocks.h"
+
+void setup_button();
+int button_input();
 
 #endif

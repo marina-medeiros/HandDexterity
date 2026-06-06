@@ -52,6 +52,7 @@ add_executable(HandDexterity HandDexterity.c
                 src/leds.c
                 src/display.c
                 src/joystick.c
+                src/button.c
                 src/learn.c
                 src/ssd1306.c)
 
