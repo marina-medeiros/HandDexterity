@@ -1,6 +1,8 @@
 #include "include/display.h"
 #include "pico/stdlib.h"
 
+#include <stdio.h>
+
 ssd1306_t disp;
 
 void setup_display(){
@@ -29,20 +31,45 @@ void print_retangulo(int x1, int y1, int x2, int y2){
     ssd1306_show(&disp);
 }
 
-void print_menu(int pos){
+void print_square(int x1, int y1, int x2, int y2){
+    ssd1306_draw_square(&disp, x1, y1, x2, y2);
+    ssd1306_show(&disp);
+}
+
+void print_menu(int pos_y, int menu_type){
+    if(menu_type == 0){
+        print_main_menu(pos_y);
+    }else{
+        print_settings(pos_y);
+    }
+
+}
+
+void print_main_menu(int pos_y){
         ssd1306_clear(&disp);
         print_texto(52, 2, 1.5, "Menu");
-        print_retangulo(2,pos+2,120,12);
+        print_retangulo(2,pos_y+2,120,12);
         print_texto(6, 18, 1.9, "Hand Dexterity Test");
         print_texto(6, 30, 1.9, "Learn");
         print_texto(6, 42, 1.9, "Settings");
 }
 
-void print_settings(int pos){
+void print_settings(int pos_y){
         ssd1306_clear(&disp);
-        print_texto(10, 2, 1.5, "Joystick Sensibility");
-        print_retangulo(2,pos+2,120,12);
-        print_texto(30, 18, 1.9, "High");
-        print_texto(30, 30, 1.9, "Medium");
-        print_texto(30, 42, 1.9, "Low");
+        print_texto(5, 2, 1.5, "Joystick Sensibility");
+
+        int aux = pos_y / 12;
+        int pos = 18 * aux + 1;
+        print_square(6, pos, 14, 6);
+
+        printf("Age: %d years old\n", pos_y);
+
+        print_retangulo(2,15,20,12); 
+        print_texto(30, 15, 1.9, "High");
+
+        print_retangulo(2,33,20,12);
+        print_texto(30, 33, 1.9, "Medium");
+
+        print_retangulo(2,51,20,12);
+        print_texto(30, 51, 1.9, "Low");
 }

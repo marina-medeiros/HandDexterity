@@ -41,12 +41,8 @@ uint8_t menu_control(int menu_type){
     uint pos_y=12; //inicialização de variável para ler posição do Y do Joystick
     uint posy_ant=12; 
     uint menu=1;
-    
-    if(menu_type == 0){
-        print_menu(pos_y);
-    }else{
-        print_settings(pos_y);
-    }
+
+    print_menu(pos_y, menu_type);
 
     while (true) {
         adc_select_input(0);
@@ -69,11 +65,7 @@ uint8_t menu_control(int menu_type){
                 menu--;
         } 
         if(pos_y!=posy_ant){ 
-            if(menu_type == 0){
-                print_menu(pos_y);
-            }else{
-                print_settings(pos_y);
-            }
+            print_menu(pos_y, menu_type);
         }
         if(gpio_get(SW) == 0){
             if(menu > 3 || menu < 1){
