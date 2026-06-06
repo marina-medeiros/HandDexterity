@@ -35,15 +35,18 @@ void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value) {
     *vry_value = adc_read();
 }
 
-
-uint8_t menu_control(){ 
+uint8_t menu_control(int menu_type){ 
     uint countdown = 0; //verificar seleções para baixo do joystick
     uint countup = 2; //verificar seleções para cima do joystick
     uint pos_y=12; //inicialização de variável para ler posição do Y do Joystick
     uint posy_ant=12; 
     uint menu=1;
     
-    print_menu(pos_y);
+    if(menu_type == 0){
+        print_menu(pos_y);
+    }else{
+        print_settings(pos_y);
+    }
 
     while (true) {
         adc_select_input(0);
@@ -66,7 +69,11 @@ uint8_t menu_control(){
                 menu--;
         } 
         if(pos_y!=posy_ant){ 
-            print_menu(pos_y);
+            if(menu_type == 0){
+                print_menu(pos_y);
+            }else{
+                print_settings(pos_y);
+            }
         }
         if(gpio_get(SW) == 0){
             if(menu > 3 || menu < 1){

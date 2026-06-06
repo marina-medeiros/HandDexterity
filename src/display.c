@@ -30,10 +30,19 @@ void print_retangulo(int x1, int y1, int x2, int y2){
 }
 
 void print_menu(int pos){
-        ssd1306_clear(&disp);//Limpa a tela
+        ssd1306_clear(&disp);
         print_texto(52, 2, 1.5, "Menu");
         print_retangulo(2,pos+2,120,12);
         print_texto(6, 18, 1.9, "Hand Dexterity Test");
         print_texto(6, 30, 1.9, "Learn");
         print_texto(6, 42, 1.9, "Settings");
+}
+
+void print_settings(int pos){
+        ssd1306_clear(&disp);
+        print_texto(10, 2, 1.5, "Joystick Sensibility");
+        print_retangulo(2,pos+2,120,12);
+        print_texto(30, 18, 1.9, "High");
+        print_texto(30, 30, 1.9, "Medium");
+        print_texto(30, 42, 1.9, "Low");
 }

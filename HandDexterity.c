@@ -10,11 +10,18 @@
 #include "include/display.h"
 #include "include/leds.h"
 #include "include/joystick.h"
-#include "include/learn.h"
+#include "include/test.h"
 #include "include/button.h"
 
 volatile TaskHandle_t xActiveTaskHandle = NULL;
 volatile TaskHandle_t xMenuTaskHandle   = NULL;
+
+volatile int sensibility = 0;
+
+enum MenuType{
+    MENU, 
+    SETTINGS
+};
 
 void setup(){
     stdio_init_all();
@@ -32,7 +39,6 @@ void vExitTask(void *pvParameters){
                 vTaskDelete(xActiveTaskHandle); 
                 xActiveTaskHandle = NULL;
                 set_leds(0, 0, 0);
-
 
                 if (xMenuTaskHandle != NULL) {
                     vTaskResume(xMenuTaskHandle);
@@ -54,15 +60,42 @@ void vLearnTask(void *pvParameters) {
     }
 }
 
+void vTestTask(void *pvParameters) {
+    xActiveTaskHandle = xTaskGetCurrentTaskHandle();
+
+    while (true) {
+        test();
+    }
+}
+
+void vSettingsTask(void *pvParameters){
+    xActiveTaskHandle = xTaskGetCurrentTaskHandle();
+    while (true) {
+        uint8_t selection = menu_control(SETTINGS);
+
+        switch (selection) {
+            case 1:
+                sensibility = 1;
+                break;
+            case 2:
+                sensibility = 2;
+                break;
+            case 3:
+                sensibility = 3;
+                break;
+        }
+    }
+}
+
 void vMenuTask(void *pvParameters) {
     xMenuTaskHandle = xTaskGetCurrentTaskHandle();
     while (true) {
-        uint8_t selection = menu_control();
+        uint8_t selection = menu_control(MENU);
 
         switch (selection) {
             case 1:
                 set_leds(1, 0, 0);
-                //xTaskCreate(vTestTask, "Test", 256, NULL, 1, NULL);
+                xTaskCreate(vTestTask, "Test", 256, NULL, 1, NULL);
                 break;
             case 2:
                 set_leds(0, 1, 0);
@@ -70,7 +103,7 @@ void vMenuTask(void *pvParameters) {
                 break;
             case 3:
                 set_leds(0, 0, 1);
-                //xTaskCreate(vSettingsTask, "Settings", 256, NULL, 1, NULL);
+                xTaskCreate(vSettingsTask, "Settings", 256, NULL, 1, NULL);
                 break;
         }
 
