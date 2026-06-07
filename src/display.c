@@ -60,8 +60,6 @@ void print_settings(int pos_y){
 
         print_square(6, (1.5*pos_y+1), 14, 6);
 
-        printf("Age: %d years old\n", pos_y);
-
         print_retangulo(2,15,20,12); 
         print_texto(30, 15, 1.9, "High");
 

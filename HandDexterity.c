@@ -16,7 +16,7 @@
 volatile TaskHandle_t xActiveTaskHandle = NULL;
 volatile TaskHandle_t xMenuTaskHandle   = NULL;
 
-volatile int sensibility = 0;
+float sensibility = 1.5f;
 
 enum MenuType{
     MENU, 
@@ -38,7 +38,6 @@ void vExitTask(void *pvParameters){
                 vTaskSuspend(xActiveTaskHandle);
                 vTaskDelete(xActiveTaskHandle); 
                 xActiveTaskHandle = NULL;
-                set_leds(0, 0, 0);
 
                 if (xMenuTaskHandle != NULL) {
                     vTaskResume(xMenuTaskHandle);
@@ -75,14 +74,16 @@ void vSettingsTask(void *pvParameters){
 
         switch (selection) {
             case 1:
-                sensibility = 1;
+                sensibility = 3.0f;
                 break;
             case 2:
-                sensibility = 2;
+                sensibility = 1.5f;
                 break;
             case 3:
-                sensibility = 3;
+                sensibility = 0.7f;
                 break;
+            default:
+                sensibility = 1.5f;
         }
     }
 }
@@ -94,15 +95,12 @@ void vMenuTask(void *pvParameters) {
 
         switch (selection) {
             case 1:
-                set_leds(1, 0, 0);
                 xTaskCreate(vTestTask, "Test", 256, NULL, 1, NULL);
                 break;
             case 2:
-                set_leds(0, 1, 0);
                 xTaskCreate(vLearnTask, "Learn", 256, NULL, 1, NULL);
                 break;
             case 3:
-                set_leds(0, 0, 1);
                 xTaskCreate(vSettingsTask, "Settings", 256, NULL, 1, NULL);
                 break;
         }
