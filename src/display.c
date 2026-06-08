@@ -16,7 +16,7 @@ void setup_display(){
     ssd1306_clear(&disp);
 }
 
-void print_texto(int x, int y, int tam, char * msg){
+void print_text(int x, int y, int tam, char * msg){
     ssd1306_draw_string(&disp, x, y, tam, msg);
     ssd1306_show(&disp);
 }
@@ -26,7 +26,7 @@ void print_tiny_square(uint16_t x, uint16_t y){
     ssd1306_show(&disp);
 }
 
-void print_retangulo(int x1, int y1, int x2, int y2){
+void print_rectangle(int x1, int y1, int x2, int y2){
     ssd1306_draw_empty_square(&disp, x1, y1, x2, y2);
     ssd1306_show(&disp);
 }
@@ -47,25 +47,25 @@ void print_menu(int pos_y, int menu_type){
 
 void print_main_menu(int pos_y){
         ssd1306_clear(&disp);
-        print_texto(52, 2, 1.5, "Menu");
-        print_retangulo(2,pos_y+2,120,12);
-        print_texto(6, 18, 1.9, "Hand Dexterity Test");
-        print_texto(6, 30, 1.9, "Learn");
-        print_texto(6, 42, 1.9, "Settings");
+        print_text(52, 2, 1.5, "Menu");
+        print_rectangle(2,pos_y+2,120,12);
+        print_text(6, 18, 1.9, "Hand Dexterity Test");
+        print_text(6, 30, 1.9, "Learn");
+        print_text(6, 42, 1.9, "Settings");
 }
 
 void print_settings(int pos_y){
         ssd1306_clear(&disp);
-        print_texto(5, 2, 1.5, "Joystick Sensibility");
+        print_text(5, 2, 1.5, "Joystick Sensibility");
 
         print_square(6, (1.5*pos_y+1), 14, 6);
 
-        print_retangulo(2,15,20,12); 
-        print_texto(30, 15, 1.9, "High");
+        print_rectangle(2,15,20,12); 
+        print_text(30, 15, 1.9, "High");
 
-        print_retangulo(2,33,20,12);
-        print_texto(30, 33, 1.9, "Medium");
+        print_rectangle(2,33,20,12);
+        print_text(30, 33, 1.9, "Medium");
 
-        print_retangulo(2,51,20,12);
-        print_texto(30, 51, 1.9, "Low");
+        print_rectangle(2,51,20,12);
+        print_text(30, 51, 1.9, "Low");
 }
