@@ -36,7 +36,7 @@ FetchContent_Declare( freertos_kernel
 add_library(freertos_config INTERFACE)
 target_include_directories(freertos_config SYSTEM
 INTERFACE
-    include
+    include/extern
 )
 
 set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
@@ -49,15 +49,15 @@ FetchContent_MakeAvailable(freertos_kernel)
 # ====================================================================================
 
 add_executable(HandDexterity HandDexterity.c 
+                src/connection/mqtt_comm.c
+                src/connection/mqtt.c
+                src/connection/wifi_conn.c
+                src/extern/ssd1306.c
                 src/button.c
                 src/display.c
                 src/joystick.c
                 src/leds.c
-                src/mqtt_comm.c
-                src/mqtt.c
-                src/ssd1306.c
-                src/test.c
-                src/wifi_conn.c)
+                src/test.c)
 
 pico_set_program_name(HandDexterity "HandDexterity")
 pico_set_program_version(HandDexterity "0.1")

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-#include "include/ssd1306.h"
+#include "include/extern/ssd1306.h"
 #include "hardware/adc.h"
 
 #define LED_B 12

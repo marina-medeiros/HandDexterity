@@ -1,5 +1,5 @@
 #include "hardware/adc.h"
-#include "joystick.h"
+#include "include/joystick.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
 

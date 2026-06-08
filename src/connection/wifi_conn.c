@@ -1,4 +1,4 @@
-#include "../include/wifi_conn.h"         // Cabeçalho com a declaração da função de conexão Wi-Fi
+#include "../../include/connection/wifi_conn.h"         // Cabeçalho com a declaração da função de conexão Wi-Fi
 #include "pico/cyw43_arch.h"           // Biblioteca para controle do chip Wi-Fi CYW43 no Raspberry Pi Pico W
 #include <stdio.h>                     // Biblioteca padrão de entrada/saída (para usar printf)
 

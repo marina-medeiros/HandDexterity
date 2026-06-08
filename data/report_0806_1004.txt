@@ -1,0 +1,45 @@
+= HAND DEXTERITY TEST ===========
+Date: 08/06/2026
+Time of finish: 10:06
+
+= Left Hand =====================
+- Triangle ----------------------
+Time: 00:03:02
+Speed: 30 pixels per second
+Accuracy: 90%
+Score: 70/100
+
+- Square ------------------------
+Time: 00:03:02
+Speed: 30 pixels per second
+Accuracy: 90%
+Score: 70/100
+
+- Circle ------------------------
+Time: 00:03:02
+Speed: 30 pixels per second
+Accuracy: 90%
+Score: 70/100
+
+= Right Hand =====================
+- Triangle ----------------------
+Time: 00:03:02
+Speed: 30 pixels per second
+Accuracy: 90%
+Score: 70/100
+
+- Square ------------------------
+Time: 00:03:02
+Speed: 30 pixels per second
+Accuracy: 90%
+Score: 70/100
+
+- Circle ------------------------
+Time: 00:03:02
+Speed: 30 pixels per second
+Accuracy: 90%
+Score: 70/100
+
+= Hand Comparison ================
+Left Hand Average Score: 70/100
+Right Hand Average Score: 75/100

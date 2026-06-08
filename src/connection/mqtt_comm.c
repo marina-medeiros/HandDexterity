@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include "lwip/apps/mqtt.h"       // Biblioteca MQTT do lwIP
-#include "../include/mqtt_comm.h"    // Header file com as declarações locais
+#include "../../include/connection/mqtt_comm.h"    // Header file com as declarações locais
 // Base: https://github.com/BitDogLab/BitDogLab-C/blob/main/wifi_button_and_led/lwipopts.h
-#include "../include/lwipopts.h"             // Configurações customizadas do lwIP
+#include "../../include/connection/lwipopts.h"             // Configurações customizadas do lwIP
 #include <pico/stdlib.h>
 
 /* Variável global estática para armazenar a instância do cliente MQTT

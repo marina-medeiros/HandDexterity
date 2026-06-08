@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "hardware/adc.h"
-#include "include/ssd1306.h"
+#include "include/extern/ssd1306.h"
 #include "include/display.h"
 #include "include/leds.h"
 #include "FreeRTOS.h"
