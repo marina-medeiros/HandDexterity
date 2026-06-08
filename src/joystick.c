@@ -51,7 +51,7 @@ uint8_t menu_control(int menu_type){
         const uint adc_max = (1 << 12) - 1;               // 2^12 - 1 = 4095
         uint bar_y_pos = adc_y_raw * bar_width / adc_max; // (0..4095) * 40 / 4095 -> valor normalizado em [0, 40]
 
-        // 20 é o valor neutro 0 20 40
+        // 20 é o valor neutro
         if(bar_y_pos < 10 && countdown <2){
             pos_y+=12;
             countdown+=1;

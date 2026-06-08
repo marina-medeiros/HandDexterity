@@ -49,12 +49,15 @@ FetchContent_MakeAvailable(freertos_kernel)
 # ====================================================================================
 
 add_executable(HandDexterity HandDexterity.c 
-                src/leds.c
+                src/button.c
                 src/display.c
                 src/joystick.c
-                src/button.c
+                src/leds.c
+                src/mqtt_comm.c
+                src/mqtt.c
+                src/ssd1306.c
                 src/test.c
-                src/ssd1306.c)
+                src/wifi_conn.c)
 
 pico_set_program_name(HandDexterity "HandDexterity")
 pico_set_program_version(HandDexterity "0.1")
@@ -74,6 +77,10 @@ target_link_libraries(HandDexterity
         hardware_i2c
         freertos_kernel
         freertos_kernel_include
+        pico_cyw43_arch_lwip_threadsafe_background
+        pico_lwip_mqtt
+        pico_lwip
+        pico_cyw43_driver
         )
 
 pico_add_extra_outputs(HandDexterity)
