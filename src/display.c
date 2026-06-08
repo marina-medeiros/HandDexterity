@@ -45,6 +45,23 @@ void print_menu(int pos_y, int menu_type){
 
 }
 
+void print_big_square(){
+    ssd1306_draw_empty_square(&disp, 30, 7, 70, 50);
+    ssd1306_show(&disp);
+}
+
+
+void print_big_triangle(){
+    ssd1306_draw_empty_square(&disp, 25, 7, 32, 50);
+    ssd1306_show(&disp);
+}
+
+
+void print_big_circle(){
+    ssd1306_draw_empty_square(&disp, 10, 7, 70, 50);
+    ssd1306_show(&disp);
+}
+
 void print_main_menu(int pos_y){
         ssd1306_clear(&disp);
         print_text(52, 2, 1.5, "Menu");

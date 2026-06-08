@@ -17,5 +17,8 @@ void print_rectangle(int x1, int y1, int x2, int y2);
 void print_menu(int pos_y, int menu_type);
 void print_main_menu(int pos_y);
 void print_settings(int pos_y);
+void print_big_square();
+void print_big_circle();
+void print_big_triangle();
 
 #endif
