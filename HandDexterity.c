@@ -64,6 +64,14 @@ void vTestTask(void *pvParameters) {
 
     while (true) {
         test();
+
+        if (xMenuTaskHandle != NULL) {
+            vTaskResume(xMenuTaskHandle);
+        }
+        
+        xActiveTaskHandle = NULL;
+        
+        vTaskDelete(NULL);
     }
 }
 

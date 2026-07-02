@@ -57,7 +57,9 @@ add_executable(HandDexterity HandDexterity.c
                 src/display.c
                 src/joystick.c
                 src/leds.c
-                src/test.c)
+                src/test.c
+                src/rectangle.c
+                src/triangle.c)
 
 pico_set_program_name(HandDexterity "HandDexterity")
 pico_set_program_version(HandDexterity "0.1")
@@ -70,6 +72,8 @@ target_link_libraries(HandDexterity
 
 target_include_directories(HandDexterity PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/include/connection
 )
 
 target_link_libraries(HandDexterity 
