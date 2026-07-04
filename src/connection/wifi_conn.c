@@ -1,26 +1,35 @@
-#include "../../include/connection/wifi_conn.h"         // Cabeçalho com a declaração da função de conexão Wi-Fi
-#include "pico/cyw43_arch.h"           // Biblioteca para controle do chip Wi-Fi CYW43 no Raspberry Pi Pico W
-#include <stdio.h>                     // Biblioteca padrão de entrada/saída (para usar printf)
+#include "../../include/connection/wifi_conn.h"
+#include "pico/cyw43_arch.h"
+#include <stdio.h>
 
-/**
- * Função: connect_to_wifi
- * Objetivo: Inicializar o chip Wi-Fi da Pico W e conectar a uma rede usando SSID e senha fornecidos.
- */
-void connect_to_wifi(const char *ssid, const char *password) {
-    // Inicializa o driver Wi-Fi (CYW43). Retorna 0 se for bem-sucedido.
+bool connect_to_wifi(const char *ssid, const char *password) {
+    printf("[WIFI] Iniciando cyw43_arch_init...\n");
+
     if (cyw43_arch_init()) {
-        printf("Erro ao iniciar Wi-Fi\n");
-        return;
+        printf("[WIFI] ERRO: cyw43_arch_init falhou\n");
+        return false;
     }
+    printf("[WIFI] cyw43_arch_init OK\n");
 
-    // Habilita o modo estação (STA) para se conectar a um ponto de acesso.
     cyw43_arch_enable_sta_mode();
+    printf("[WIFI] Modo STA habilitado\n");
 
-    // Tenta conectar à rede Wi-Fi com um tempo limite de 30 segundos (30000 ms).
-    // Utiliza autenticação WPA2 com criptografia AES.
-    if (cyw43_arch_wifi_connect_timeout_ms(ssid, password, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
-        printf("Erro ao conectar\n");  // Se falhar, imprime mensagem de erro.
-    } else {        
-        printf("Conectado ao Wi-Fi\n");  // Se conectar com sucesso, exibe confirmação.
+    printf("[WIFI] Tentando conectar a SSID='%s' (timeout 30000ms)...\n", ssid);
+
+    int result = cyw43_arch_wifi_connect_timeout_ms(ssid, password, CYW43_AUTH_WPA2_AES_PSK, 30000);
+
+    printf("[WIFI] cyw43_arch_wifi_connect_timeout_ms retornou: %d (0 = sucesso)\n", result);
+
+    if (result != 0) {
+        printf("[WIFI] ERRO ao conectar. Código: %d\n", result);
+        return false;
     }
+
+    printf("[WIFI] Conectado ao Wi-Fi com sucesso!\n");
+
+    // Log extra: mostra o IP obtido via DHCP, útil para confirmar que a rede está de fato operacional
+    struct netif *netif = &cyw43_state.netif[CYW43_ITF_STA];
+    printf("[WIFI] IP obtido: %s\n", ip4addr_ntoa(netif_ip4_addr(netif)));
+
+    return true;
 }
