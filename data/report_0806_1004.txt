@@ -1,4 +1,4 @@
-= HAND DEXTERITY TEST ===========
+c= HAND DEXTERITY TEST ===========
 Date: 08/06/2026
 Time of finish: 10:06
 

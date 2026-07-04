@@ -4,13 +4,13 @@
 #include "test.h"
 
 #define P1_X 64
-#define P1_Y 10
+#define P1_Y 20
 
-#define P2_X 100
-#define P2_Y 54
+#define P2_X 88
+#define P2_Y 46
 
-#define P3_X 28
-#define P3_Y 54
+#define P3_X 40
+#define P3_Y 46
 
 typedef enum {
     TRI_STATE_WAIT_START = 0,
