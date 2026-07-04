@@ -7,6 +7,7 @@
 #include "hardware/adc.h"
 
 #include "include/extern/ssd1306.h"
+#include "include/connection/mqtt.h"
 #include "include/display.h"
 #include "include/leds.h"
 #include "include/joystick.h"
@@ -25,6 +26,7 @@ enum MenuType{
 
 void setup(){
     stdio_init_all();
+    setup_connection();
     setup_display();
     setup_leds();
     setup_joystick();
