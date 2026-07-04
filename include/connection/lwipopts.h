@@ -19,7 +19,7 @@
 #define MEM_LIBC_MALLOC             0
 #endif
 #define MEM_ALIGNMENT               4
-#define MEM_SIZE                    4000
+#define MEM_SIZE                    12288
 #define MEMP_NUM_TCP_SEG            32
 #define MEMP_NUM_ARP_QUEUE          10
 #define PBUF_POOL_SIZE              24
@@ -97,6 +97,7 @@
 // O valor 5 significa que até 5 requisições simultâneas (como PUBLISH, SUBSCRIBE etc) podem ser enviadas antes de precisar receber as confirmações correspondentes
 // Isso ajuda a controlar o fluxo de mensagens no protocolo MQTT
 #define MQTT_REQ_MAX_IN_FLIGHT  (5)
+#define MQTT_OUTPUT_RINGBUF_SIZE 1024 
 
 // Estas definições são parte da personalização do LWIP para atender às necessidades específicas de um projeto, 
 // permitindo ajustar o comportamento da pilha de rede e do cliente MQTT de acordo com os requisitos de memória, 

@@ -8,6 +8,7 @@
 /* Variável global estática para armazenar a instância do cliente MQTT
  * 'static' limita o escopo deste arquivo */
 static mqtt_client_t *client;
+static volatile bool mqtt_connected = false;
 
 /* Callback de conexão MQTT - chamado quando o status da conexão muda
  * Parâmetros:
@@ -17,10 +18,17 @@ static mqtt_client_t *client;
 static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status) {
     if (status == MQTT_CONNECT_ACCEPTED) {
         printf("Conectado ao broker MQTT com sucesso!\n");
+        mqtt_connected = true;
     } else {
         printf("Falha ao conectar ao broker, código: %d\n", status);
+        mqtt_connected = false;
     }
 }
+
+bool mqtt_comm_is_connected(void) {
+    return mqtt_connected;
+}
+
 
 /* Função para configurar e iniciar a conexão MQTT
  * Parâmetros:
