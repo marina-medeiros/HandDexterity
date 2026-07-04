@@ -20,7 +20,7 @@ void setup_connection(){
     }
 
     printf("[SETUP] Wi-Fi OK. Chamando mqtt_setup...\n");
-    mqtt_setup(MQTT_CLIENT_ID, MQTT_BROKER_IP, MQTT_USER, MQTT_PASSWORD);
+    mqtt_setup(MQTT_CLIENT_ID, MQTT_BROKER_IP, NULL, NULL);
     printf("[SETUP] mqtt_setup retornou\n");
 }
 
