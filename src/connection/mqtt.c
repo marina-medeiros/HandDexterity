@@ -4,6 +4,8 @@
 #include "include/connection/wifi_conn.h"     
 #include "include/connection/mqtt_comm.h"
 #include "include/connection/mqtt.h"
+#include "include/test.h"
+#include "include/leds.h"
 
 int load_config(const char *filename, AppConfig *prefs) {
     FILE *file = fopen(filename, "r");
@@ -69,6 +71,32 @@ void setup_connection(){
                config.mqtt_password);
 }
 
-void publish_with_mqtt(){
-    int a = 0;
+void publish_with_mqtt(TestResult results[2]){
+    char payload_rectangle[128];
+
+    snprintf(payload_rectangle, sizeof(payload_rectangle),
+        "{\"avg_error\":%.2f,\"accuracy\":%.2f,\"time_ms\":%lu}",
+        results[0].average_error,
+        results[0].accuracy,
+        (unsigned long)results[0].time_ms);
+
+    if(mqtt_comm_publish("UFRN/embarcados/HandDexterity/rectangle", 
+                        (const uint8_t *)payload_rectangle, 
+                        strlen(payload_rectangle))){
+        set_leds(0, 1, 0);
+    }
+
+    char payload_triangle[128];
+
+    snprintf(payload_triangle, sizeof(payload_triangle),
+        "{\"avg_error\":%.2f,\"accuracy\":%.2f,\"time_ms\":%lu}",
+        results[1].average_error,
+        results[1].accuracy,
+        (unsigned long)results[1].time_ms);
+
+    if(mqtt_comm_publish("UFRN/embarcados/HandDexterity/triangle", 
+                        (const uint8_t *)payload_triangle, 
+                        strlen(payload_triangle))){
+        set_leds(0, 1, 0);
+    }
 }

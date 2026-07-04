@@ -65,7 +65,9 @@ void vTestTask(void *pvParameters) {
     xActiveTaskHandle = xTaskGetCurrentTaskHandle();
 
     while (true) {
-        test();
+        TestResult results[2];
+        test(results);
+        publish_with_mqtt(results);
 
         if (xMenuTaskHandle != NULL) {
             vTaskResume(xMenuTaskHandle);
@@ -124,7 +126,7 @@ int main(){
     setup();
 
     xTaskCreate(vExitTask, "Exit", 256, NULL, 2, NULL);
-    xTaskCreate(vMenuTask,   "Menu",   512, NULL, 1, NULL);
+    xTaskCreate(vMenuTask, "Menu", 512, NULL, 1, NULL);
 
     vTaskStartScheduler();
     while (true); 

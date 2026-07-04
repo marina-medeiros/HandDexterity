@@ -101,7 +101,7 @@ TestResult calculate_score(Point* trajectory, int sample_count, Shape shape, uin
     return result;
 }
 
-void test() {
-    TestResult rectangle_result = rectangle_test();
-    TestResult triangle_result = triangle_test();
+void test(TestResult results[2]) {
+    results[0] = rectangle_test();
+    results[1] = triangle_test();
 }

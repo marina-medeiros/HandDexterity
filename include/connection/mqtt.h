@@ -1,6 +1,8 @@
 #ifndef MQTT_H
 #define MQTT_H
 
+#include "include/test.h"
+
 #define MAX_LINE 256
 
 typedef struct {
@@ -14,6 +16,6 @@ typedef struct {
 
 int load_config(const char *filename, AppConfig *prefs);
 void setup_connection();
-void publish_with_mqtt();
+void publish_with_mqtt(TestResult results[2]);
 
 #endif

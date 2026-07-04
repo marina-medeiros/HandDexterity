@@ -36,6 +36,6 @@ bool is_in_checkpoint(int user_x, int user_y, int target_x, int target_y);
 TestResult calculate_score(Point* trajectory, int sample_count, Shape shape, uint32_t time_ms);
 
 void learn();
-void test();
+void test(TestResult results[2]);
 
 #endif
