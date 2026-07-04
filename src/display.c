@@ -42,7 +42,6 @@ void print_menu(int pos_y, int menu_type){
     }else{
         print_settings(pos_y);
     }
-
 }
 
 void print_main_menu(int pos_y){

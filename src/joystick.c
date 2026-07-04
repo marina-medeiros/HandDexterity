@@ -35,12 +35,23 @@ void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value) {
     *vry_value = adc_read();
 }
 
-uint8_t menu_control(int menu_type){ 
-    uint countdown = 0; //verificar seleções para baixo do joystick
-    uint countup = 2; //verificar seleções para cima do joystick
-    uint pos_y=12; //inicialização de variável para ler posição do Y do Joystick
-    uint posy_ant=12; 
+uint8_t menu_control(int menu_type, float sensibility){ 
+    uint countdown = 0;     //verificar seleções para baixo do joystick
+    uint countup = 2;       //verificar seleções para cima do joystick
+    uint pos_y=12;          //inicialização de variável para ler posição do Y do Joystick
     uint menu=1;
+
+    if(menu_type == 1){
+        if(sensibility == 3.0f) {
+            pos_y = 12; menu = 1; countdown = 0; countup = 2;
+        }else if(sensibility == 1.5f){
+            pos_y = 24; menu = 2; countdown = 1; countup = 1;
+        }else if(sensibility == 0.7f){
+            pos_y = 36; menu = 3; countdown = 2; countup = 0;
+        }
+    }
+
+    uint posy_ant=pos_y; 
 
     print_menu(pos_y, menu_type);
 

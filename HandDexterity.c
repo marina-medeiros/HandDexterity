@@ -78,7 +78,7 @@ void vTestTask(void *pvParameters) {
 void vSettingsTask(void *pvParameters){
     xActiveTaskHandle = xTaskGetCurrentTaskHandle();
     while (true) {
-        uint8_t selection = menu_control(SETTINGS);
+        uint8_t selection = menu_control(SETTINGS, sensibility);
 
         switch (selection) {
             case 1:
@@ -99,7 +99,7 @@ void vSettingsTask(void *pvParameters){
 void vMenuTask(void *pvParameters) {
     xMenuTaskHandle = xTaskGetCurrentTaskHandle();
     while (true) {
-        uint8_t selection = menu_control(MENU);
+        uint8_t selection = menu_control(MENU, 0);
 
         switch (selection) {
             case 1:
