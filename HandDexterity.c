@@ -67,7 +67,12 @@ void vTestTask(void *pvParameters) {
     while (true) {
         TestResult results[2];
         test(results);
-        publish_with_mqtt(results);
+        publish_with_mqtt(results[0]);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        set_leds(0, 0, 0);
+        publish_with_mqtt(results[1]);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        set_leds(0, 0, 0);
 
         if (xMenuTaskHandle != NULL) {
             vTaskResume(xMenuTaskHandle);

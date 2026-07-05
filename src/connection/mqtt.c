@@ -24,17 +24,27 @@ void setup_connection(){
     printf("[SETUP] mqtt_setup retornou\n");
 }
 
-void publish_with_mqtt(TestResult results[2]){
+void publish_with_mqtt(TestResult result){
     printf("[PUBLISH] Iniciando publish_with_mqtt...\n");
-    printf("[PUBLISH] average_error = %f\n", results[0].average_error);
+    printf("[PUBLISH] average_error = %f\n", result.average_error);
 
-    char payload[32];
-    snprintf(payload, sizeof(payload), "%.2f", results[0].average_error);
+    char payload[128];
+    char topic[50];
+
+    snprintf(payload, sizeof(payload),
+        "{\"avg_error\":%.2f,\"accuracy\":%.2f,\"time_ms\":%lu}",
+        result.average_error,
+        result.accuracy,
+        (unsigned long)result.time_ms);
+
     printf("[PUBLISH] Payload formatado: '%s' (len=%zu)\n", payload, strlen(payload));
 
-    int ok = mqtt_comm_publish("UFRN/embarcados/HandDexterity/rectangle", 
-                        (const uint8_t *)payload, 
-                        strlen(payload));
+    const char *shape_name = (result.shape == Rectangle) ? "rectangle" : "triangle";
+    snprintf(topic, sizeof(topic), "UFRN/embarcados/HandDexterity/%s", shape_name);
+
+    int ok = mqtt_comm_publish(topic, 
+                                (const uint8_t *)payload, 
+                                strlen(payload));
 
     printf("[PUBLISH] mqtt_comm_publish retornou: %d\n", ok);
 
