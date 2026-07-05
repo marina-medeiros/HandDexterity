@@ -19,6 +19,8 @@ volatile TaskHandle_t xMenuTaskHandle   = NULL;
 
 float sensibility = 1.5f;
 
+static uint32_t test_counter = 0;
+
 enum MenuType{
     MENU, 
     SETTINGS
@@ -62,15 +64,16 @@ void vLearnTask(void *pvParameters) {
 }
 
 void vTestTask(void *pvParameters) {
+    test_counter++;
     xActiveTaskHandle = xTaskGetCurrentTaskHandle();
 
     while (true) {
         TestResult results[2];
         test(results);
-        publish_with_mqtt(results[0]);
+        publish_with_mqtt(results[0], test_counter);
         vTaskDelay(pdMS_TO_TICKS(100));
         set_leds(0, 0, 1);
-        publish_with_mqtt(results[1]);
+        publish_with_mqtt(results[1], test_counter);
         vTaskDelay(pdMS_TO_TICKS(100));
         set_leds(0, 0, 0);
 

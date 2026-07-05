@@ -24,12 +24,13 @@ typedef enum {
 } Shape;
 
 typedef struct {
-    float average_error;
-    float accuracy;
-    Point* trajectory;
-    int sample_count;
-    Shape shape;
     uint32_t time_ms;
+    float average_speed;
+    float accuracy;
+    float score;
+    Point* trajectory;
+    Shape shape;
+    int sample_count;
 } TestResult;
 
 bool is_in_checkpoint(int user_x, int user_y, int target_x, int target_y);

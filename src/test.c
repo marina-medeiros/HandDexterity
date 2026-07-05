@@ -58,7 +58,7 @@ float distance_to_perimeter(int px, int py, Shape shape) {
 }
 
 TestResult calculate_result(Point* trajectory, int sample_count, Shape shape, uint32_t time_ms) {
-    if (sample_count == 0) return (TestResult){0, 0, NULL, 0, shape};
+    if (sample_count == 0) return (TestResult){0, 0, 0, 0, NULL, shape, 0};
 
     float total_squared_error = 0.0f;
 
@@ -80,22 +80,34 @@ TestResult calculate_result(Point* trajectory, int sample_count, Shape shape, ui
 
     float rms_error = sqrt(total_squared_error / sample_count);
 
-    const float K_TUNING = 0.15f;
+    const float K_TUNING_ACC = 0.15f;
+    float accuracy = 100.0f * expf(-K_TUNING_ACC * rms_error);
+    float normalized_accuracy = accuracy / 100.0f;
 
-    float accuracy_pct = 100.0f * expf(-K_TUNING * rms_error);
+    const float K_TUNING_SPEED = 0.03f;
+    float average_speed = sample_count / (time_ms / 1000);
+    float normalized_speed = 1 - expf(K_TUNING_SPEED * average_speed * -1);
+
+    float score = 100.0f * powf(normalized_accuracy, 0.7) * powf(normalized_speed, 0.3);
 
     printf("\n--- RESULTS ---\n");
-    printf("Total Points: %d\n", sample_count);
     printf("RMS Deviation: %.2f pixels\n", rms_error);
-    printf("Final Accuracy: %.1f%%\n", accuracy_pct);
+    printf("Normalized acc: %.2f\n", normalized_accuracy);
+    printf("Final Accuracy: %.1f%%\n", accuracy);
+    printf("Normalized speed: %.2f\n", normalized_speed);
+    printf("Sample count: %d\n", sample_count);
+    printf("Average speed: %.2f\n", average_speed);
+    printf("Total Trajectory Points: %d\n", sample_count);
+    printf("\n\n\n\n");
 
     TestResult result = {
-        .average_error = rms_error,
-        .accuracy = accuracy_pct,
-        .trajectory = trajectory,
-        .sample_count = sample_count,
-        .shape = shape,
         .time_ms = time_ms,
+        .average_speed = average_speed,
+        .accuracy = accuracy,
+        .score = score,
+        .trajectory = trajectory,
+        .shape = shape,
+        .sample_count = sample_count,
     };
 
     return result;

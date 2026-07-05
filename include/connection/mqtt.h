@@ -6,6 +6,7 @@
 #define MAX_LINE 256
 
 void setup_connection();
-void publish_with_mqtt(TestResult result);
+void publish_with_mqtt(TestResult result, uint32_t test_counter);
+int publish_trajectory(TestResult result, uint32_t test_counter);
 
 #endif
