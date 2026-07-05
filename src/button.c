@@ -17,32 +17,3 @@ int button_input(){
     }
     return 0;
 }
-
-// bool check_debounce_button() {
-//     static uint64_t last_press_time = 0;
-//     const uint debounce_time_ms = 50;
-
-//     if (button_input) {
-//         uint64_t current_time = to_ms_since_boot(get_absolute_time());
-//         if (current_time - last_press_time > debounce_time_ms) {
-//             last_press_time = current_time;
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-// void wait_for_button_release() {
-//     while (gpio_get(BTN_A_PIN) == 0) {
-//         sleep_ms(10);
-//     }
-// }
-
-
-// bool debounce_button(){
-//     if (debounce_button()) {
-//         wait_for_button_release();
-//         return true;
-//     }
-//     return false;
-// }

@@ -141,29 +141,29 @@ TestResult rectangle_test() {
     TickType_t end_tick = xTaskGetTickCount();
     uint32_t elapsed_ms = (end_tick - start_tick) * portTICK_PERIOD_MS;
 
-    TestResult score;
+    TestResult result;
 
-    char msg_score[20];
+    char msg_result[20];
     char msg_time[20];
 
     ssd1306_clear(&disp);
 
     if (current_state == RECT_STATE_FINISHED) {
-        score = calculate_score(rect_trajectory, rect_sample_count, Rectangle, elapsed_ms);
+        result = calculate_result(rect_trajectory, rect_sample_count, Rectangle, elapsed_ms);
 
-        sprintf(msg_score, "Score: %.1f%%", score.accuracy);
-        sprintf(msg_time, "Time: %.1fs", score.time_ms / 1000.f);
+        sprintf(msg_result, "result: %.1f%%", result.accuracy);
+        sprintf(msg_time, "Time: %.1fs", result.time_ms / 1000.f);
 
-        print_texto(15, 30, 1, msg_score);
+        print_texto(15, 30, 1, msg_result);
         print_texto(15, 40, 1, msg_time);
     } else {
-        sprintf(msg_score, "Time out!");
-        print_texto(30, 30, 1, msg_score);
+        sprintf(msg_result, "Time out!");
+        print_texto(30, 30, 1, msg_result);
     }
 
     ssd1306_show(&disp);
 
     vTaskDelay(pdMS_TO_TICKS(2000));
 
-    return score;
+    return result;
 }

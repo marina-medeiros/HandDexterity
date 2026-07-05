@@ -33,7 +33,7 @@ typedef struct {
 } TestResult;
 
 bool is_in_checkpoint(int user_x, int user_y, int target_x, int target_y);
-TestResult calculate_score(Point* trajectory, int sample_count, Shape shape, uint32_t time_ms);
+TestResult calculate_result(Point* trajectory, int sample_count, Shape shape, uint32_t time_ms);
 
 void learn();
 void test(TestResult results[2]);

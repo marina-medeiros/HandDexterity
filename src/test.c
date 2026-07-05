@@ -57,7 +57,7 @@ float distance_to_perimeter(int px, int py, Shape shape) {
         }
 }
 
-TestResult calculate_score(Point* trajectory, int sample_count, Shape shape, uint32_t time_ms) {
+TestResult calculate_result(Point* trajectory, int sample_count, Shape shape, uint32_t time_ms) {
     if (sample_count == 0) return (TestResult){0, 0, NULL, 0, shape};
 
     float total_squared_error = 0.0f;
@@ -87,7 +87,7 @@ TestResult calculate_score(Point* trajectory, int sample_count, Shape shape, uin
     printf("\n--- RESULTS ---\n");
     printf("Total Points: %d\n", sample_count);
     printf("RMS Deviation: %.2f pixels\n", rms_error);
-    printf("Final Score: %.1f%%\n", accuracy_pct);
+    printf("Final Accuracy: %.1f%%\n", accuracy_pct);
 
     TestResult result = {
         .average_error = rms_error,
