@@ -4,9 +4,11 @@
 #include "include/connection/wifi_conn.h"     
 #include "include/connection/mqtt_comm.h"
 #include "include/connection/mqtt.h"
+#include "include/connection/secrets.h"
 #include "include/test.h"
 #include "include/leds.h"
-#include "include/connection/secrets.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 
 void setup_connection(){
@@ -39,56 +41,56 @@ int publish_trajectory(TestResult result, uint32_t test_counter){
 
     char traj_topic[64];
     const char *shape_name = (result.shape == Rectangle) ? "rectangle" : "triangle";
-    snprintf(traj_topic, sizeof(traj_topic), "DIMAP/embarcados/HandDexterity/test%lu/%s/trajectory", (unsigned long)test_counter, shape_name);
+    snprintf(traj_topic, sizeof(traj_topic), "UFRN/HandDexterity/test%lu/%s/trajectory", (unsigned long)test_counter, shape_name);
     int ok = mqtt_comm_publish(traj_topic, (const uint8_t *)traj_payload, strlen(traj_payload));
 
     return ok;
 }
 
-void publish_with_mqtt(TestResult result, uint32_t test_counter){
+void check_publish(int publish_validation){
+    if(publish_validation){
+        printf("--[PUBLISH] envio de data bem sucedido\n");
+        set_leds(0, 1, 0);
+    } else {
+        printf("--[PUBLISH] Publicação falhou, LED não foi setado\n");
+    }
+    vTaskDelay(pdMS_TO_TICKS(300));
+}
+
+
+void publish_with_mqtt(TestResult result[2], float sensibility, uint32_t test_counter){
     printf("[PUBLISH] Iniciando publish_with_mqtt...\n");
-    printf("[PUBLISH] time_ms = %lu\n", (unsigned long)result.time_ms);
-    printf("[PUBLISH] average_speed = %f\n", result.average_speed);
-    printf("[PUBLISH] accuracy = %f\n", result.accuracy);
-    printf("[PUBLISH] score = %f\n", result.score);
-    printf("[PUBLISH] sample_count = %d\n", result.sample_count);
-    printf("[PUBLISH] shape = %s\n", (result.shape == Rectangle) ? "rectangle" : "triangle");
 
     char payload[128];
     char topic[50];
+    char sensibility_payload[50];
+    char sensibility_topic[50];
 
-    snprintf(payload, sizeof(payload),
-        "{\"time_ms\":%lu,\"average_speed\":%.2f,\"accuracy\":%.2f,\"score\":%.2f}",
-        (unsigned long)result.time_ms,
-        result.average_speed,
-        result.accuracy,
-        result.score);
+    snprintf(sensibility_topic, sizeof(sensibility_topic), "UFRN/HandDexterity/test%lu/sensibility", 
+            (unsigned long)test_counter);
+    snprintf(sensibility_payload, sizeof(sensibility_payload),
+            "%.2f", sensibility);
 
-    printf("[PUBLISH] Payload formatado: '%s' (len=%zu)\n", payload, strlen(payload));
+    check_publish(mqtt_comm_publish(sensibility_topic, 
+                (const uint8_t *)sensibility_payload, strlen(sensibility_payload)));
 
-    const char *shape_name = (result.shape == Rectangle) ? "rectangle" : "triangle";
-    snprintf(topic, sizeof(topic), "DIMAP/HandDexterity/test%lu/%s/data", 
-             (unsigned long)test_counter, shape_name);
+    for(int ii = 0; ii < 2; ii++){
+        snprintf(payload, sizeof(payload),
+            "{\"time_ms\":%lu,\"average_speed\":%.2f,\"accuracy\":%.2f,\"score\":%.2f}",
+            (unsigned long)result[ii].time_ms,
+            result[ii].average_speed,
+            result[ii].accuracy,
+            result[ii].score);
 
-    int ok = mqtt_comm_publish(topic, 
-                                (const uint8_t *)payload, 
-                                strlen(payload));
+        printf("[PUBLISH] Payload formatado: '%s' (len=%zu)\n", payload, strlen(payload));
 
+        const char *shape_name = (result[ii].shape == Rectangle) ? "rectangle" : "triangle";
+        snprintf(topic, sizeof(topic), "UFRN/HandDexterity/test%lu/%s/data", 
+                (unsigned long)test_counter, shape_name);
 
-    if(ok){
-        printf("[PUBLISH] mqtt_comm_publish bem sucedido");
-        set_leds(0, 1, 0);
-    } else {
-        printf("[PUBLISH] Publicação falhou, LED não foi setado\n");
+        check_publish(mqtt_comm_publish(topic, (const uint8_t *)payload,strlen(payload)));
+
+        check_publish(publish_trajectory(result[ii], test_counter));
     }
-
-    int ok_trajectory = publish_trajectory(result, test_counter);
-
-    printf("[PUBLISH] publish_trajectory retornou: %d\n", ok);
-
-    if(ok){
-        set_leds(0, 1, 0);
-    } else {
-        printf("[PUBLISH] Publicação  da tragetória falhou, LED não foi setado\n");
-    }
+    
 }

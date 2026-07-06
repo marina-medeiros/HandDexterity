@@ -70,10 +70,8 @@ void vTestTask(void *pvParameters) {
     while (true) {
         TestResult results[2];
         test(results);
-        publish_with_mqtt(results[0], test_counter);
-        vTaskDelay(pdMS_TO_TICKS(100));
+        publish_with_mqtt(results, sensibility, test_counter);
         set_leds(0, 0, 1);
-        publish_with_mqtt(results[1], test_counter);
         vTaskDelay(pdMS_TO_TICKS(100));
         set_leds(0, 0, 0);
 

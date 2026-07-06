@@ -70,7 +70,7 @@ int mqtt_comm_publish(const char *topic, const uint8_t *data, size_t len) {
     }
 
     err_t status = mqtt_publish(
-        client, topic, data, len, 0, 1, mqtt_pub_request_cb, NULL
+        client, topic, data, len, 1, 1, mqtt_pub_request_cb, NULL
     );
 
     printf("[MQTT] mqtt_publish retornou: %d\n", status);
